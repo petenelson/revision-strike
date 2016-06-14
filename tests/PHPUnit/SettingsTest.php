@@ -80,6 +80,17 @@ class SettingsTest extends TestCase {
 			),
 		) );
 
+		M::wpFunction( 'add_settings_field', array(
+			'times'  => 1,
+			'args'   => array(
+				'revision-strike-post-types',
+				'*',
+				array( $instance, 'post_types_field' ),
+				'writing',
+				'revision-strike'
+			),
+		) );
+
 		M::wpPassthruFunction( '__' );
 
 		$instance->add_settings_section();

@@ -70,6 +70,14 @@ class RevisionStrikeSettings {
 			'writing',
 			'revision-strike'
 		);
+
+		add_settings_field(
+			'revision-strike-post_type',
+			__( 'Post Types', 'revision-strike' ),
+			array( $this, 'post_types_field' ),
+			'writing',
+			'revision-strike'
+		);
 	}
 
 	/**
@@ -143,6 +151,66 @@ class RevisionStrikeSettings {
 	}
 
 	/**
+	 * Generate the revision-strike[post_type] field.
+	 */
+	public function post_types_field() {
+
+		// get a list of public post types that support revisions
+		$post_types = $this->get_revisionable_post_types();
+
+		$selected_post_types = $this->get_option( 'post_type' );
+		$selected_post_types = explode( ',', $selected_post_types );
+
+		echo '<fieldset>';
+
+		foreach( $post_types as $post_type => $name ) {
+			printf ( '<label for="%s">', 'revision-strike-post_type-' . $post_type );
+			printf(
+				'<input name="revision-strike[post_type][]" id="%s" type="checkbox" value="%s" %s /> %s',
+				'revision-strike-post_type-' . $post_type,
+				esc_attr( $post_type ),
+				checked( in_array( $post_type, $selected_post_types ), true, false ),
+				esc_html( $name )
+			);
+			echo '</label><br/>';
+		}
+
+		echo '</fieldset>';
+
+
+		printf(
+			'<p class="description">%s</p>',
+			esc_html__(
+				'Post types from which to strike revisions.',
+				'revision-strike'
+			)
+		);
+	}
+
+	/**
+	 * Gets an array of public post types and their names that support
+	 * revisions.
+	 *
+	 * @return array
+	 */
+	public function get_revisionable_post_types() {
+
+		$post_type_args = array(
+			'public'   => true,
+			);
+
+		$revisionable_post_types = array();
+
+		foreach( get_post_types( $post_type_args, 'objects' ) as $post_type ) {
+			if ( post_type_supports( $post_type->name, 'revisions' ) ) {
+				$revisionable_post_types[ $post_type->name ] = $post_type->labels->name;
+			}
+		}
+
+		return $revisionable_post_types;
+	}
+
+	/**
 	 * Generate the Tools > Revision Strike page.
 	 *
 	 * This method works by setting the $default configuration, then loading tools.php, which is a
@@ -150,9 +218,10 @@ class RevisionStrikeSettings {
 	 */
 	public function tools_page() {
 		$defaults = array(
-			'days'  => $this->get_option( 'days' ),
-			'limit' => $this->get_option( 'limit' ),
-			'keep'  => $this->get_option( 'keep' ),
+			'days'        => $this->get_option( 'days' ),
+			'limit'       => $this->get_option( 'limit' ),
+			'keep'        => $this->get_option( 'keep' ),
+			'post_type'  => $this->get_option( 'post_type' ),
 		);
 		$instance = $this->instance;
 

@@ -52,6 +52,8 @@ Manually runs an instance of Revision Strike, removing revisions matching the pa
 	<dd>The maximum number of revisions to remove. This is determined by the value set on Settings &rsaquo; Writing or a default value of 50.</dd>
 	<dt>--post_type=&lt;post_type&gt;</dt>
 	<dd>One or more post types (comma-separated) for which revisions should be struck. Default value is 'post'.</dd>
+	<dt>--keep=&lt;keep&gt;</dt>
+	<dd>Keep a minimum number of revisions per post. This is determined by the value set on Settings &rsaquo; Writing or a default value of 0.</dd>
 	<dt>--verbose</dt>
 	<dd>Enable verbose logging of deleted revisions.</dd>
 </dl>
