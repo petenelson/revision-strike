@@ -203,12 +203,6 @@ class RevisionStrike {
 		// Get a list of post IDs and their revisions.
 		$results = $this->query_post_and_revision_ids( $post_type, $days );
 
-		// Allow filtering of the query results.
-		$posts = apply_filters( 'revisionstrike_revisions_query_results', $results );
-
-		// Filter the number of revisions to keep based on post types.
-		$keep  = absint( apply_filters( 'revisionstrike_revisions_post_list_keep', $keep, $post_type ) );
-
 		// Scrub the list down so we're keeping the minimum number of revs per post.
 		$posts = apply_filters( 'revisionstrike_revisions_post_list', $this->scrub_posts_list( $results, $keep ) );
 
